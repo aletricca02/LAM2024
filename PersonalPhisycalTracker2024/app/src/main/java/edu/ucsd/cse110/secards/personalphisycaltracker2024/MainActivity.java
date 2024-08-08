@@ -33,8 +33,6 @@ public class MainActivity extends AppCompatActivity {
     private TimerManager timerManager;
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
-    private AppDatabase db;
-    private ExecutorService executorService;
 
 
 
@@ -43,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        db = AppDatabase.getDatabase(this);
-        executorService = Executors.newSingleThreadExecutor();
 
         setSupportActionBar(binding.appBarMain.toolbar);
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
@@ -67,39 +63,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        TextView timerTextView = findViewById(R.id.timerTextView);
-        Button startButton = findViewById(R.id.startButton);
-        Button stopButton = findViewById(R.id.stopButton);
-        Spinner activitySpinner = findViewById(R.id.activitySpinner);
-
-        // Recupera l'array di attività
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                this,
-                R.array.activities_array,
-                R.layout.spinner_item
-        );
-        // Imposta il layout del dropdown per lo spinner
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Imposta l'adapter allo spinner
-        activitySpinner.setAdapter(adapter);
-
-        // Inizializza il TimerManager
-        timerManager = new TimerManager(timerTextView, db, activitySpinner.getSelectedItem().toString(), executorService);
-        startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                timerManager.startTimer();
-                activitySpinner.setEnabled(false); // Disabilita lo spinner quando il timer inizia
-            }
-        });
-
-        stopButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                timerManager.stopTimer();
-                activitySpinner.setEnabled(true); // Abilita lo spinner quando il timer si ferma
-            }
-        });
 
     }
 

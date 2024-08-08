@@ -17,6 +17,6 @@ public interface ActivityRecordDao {
     List<ActivityRecord> getAllRecords();
 
     @Query("SELECT * FROM activity_records WHERE date = :date")
-    List<ActivityRecord> getActivitiesForDate(long date);
+    List<ActivityRecord> getActivitiesForDate(String date);
 
 }

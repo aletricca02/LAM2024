@@ -8,15 +8,19 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 @Entity(tableName = "activity_records")
 public class ActivityRecord implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     public int id;
-    private long date;
+    private String date; // Salviamo la data come String
     public String activityName;
     public long duration; // Duration in milliseconds
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    public ActivityRecord(String activityName, long duration,  long date) {
+    public ActivityRecord(String activityName, long duration,  String date) {
         this.activityName = activityName;
         this.duration = duration;
         this.date = date;
@@ -25,7 +29,7 @@ public class ActivityRecord implements Parcelable {
 
     protected ActivityRecord(Parcel in) {
         id = in.readInt();
-        date = in.readLong();
+        date = in.readString();
         activityName = in.readString();
         duration = in.readLong();
     }
@@ -46,13 +50,10 @@ public class ActivityRecord implements Parcelable {
         return activityName;
     }
 
-    public long getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(long date) {
-        this.date = date;
-    }
 
     public long getDuration(){
         return duration;
@@ -66,7 +67,7 @@ public class ActivityRecord implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeInt(id);
-        dest.writeLong(date);
+        dest.writeString(date);
         dest.writeString(activityName);
         dest.writeLong(duration);
     }

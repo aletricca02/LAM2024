@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.widget.Spinner;
 
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -55,43 +57,21 @@ public class HistoryFragment extends Fragment {
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                Calendar selectedDate = Calendar.getInstance();
-                long dateInMillis = selectedDate.getTimeInMillis();
-                loadActivitiesForDate(dateInMillis);
+                // Crea un oggetto LocalDate con la data selezionata
+                LocalDate dataDaCalendar = LocalDate.of(year, month + 1, dayOfMonth);
 
+                // Converti la data in una stringa nel formato desiderato (yyyy-MM-dd)
+                String dataString = dataDaCalendar.toString(); // "yyyy-MM-dd" by default
+
+                // Crea un Intent per lanciare la ActivityDetailsActivity
+                Intent intent = new Intent(getActivity(), ActivityDetailsActivity.class);
+
+                // Passa la data come stringa con l'intent
+                intent.putExtra("date", dataString);
+                startActivity(intent);
             }
         });
         return rootView;
-    }
-
-    private void loadActivitiesForDate(long dateInMillis ) {
-        // Filtra activityList per la data selezionata e aggiorna l'adapter
-        List<ActivityRecord> filteredList = viewModel.filterActivities(dateInMillis );
-        // Pass the filtered list to ActivityDetailsActivity
-        Intent intent = new Intent(getActivity(), ActivityDetailsActivity.class);
-        intent.putParcelableArrayListExtra("activities", (ArrayList<? extends Parcelable>) new ArrayList<>(filteredList));
-        intent.putExtra("date",  dateInMillis );
-        startActivity(intent);
-    }
-
-   /* private List<ActivityRecord> getActivitiesForDate(Calendar date) {
-        // Implementa la logica per filtrare le attività per data
-        List<ActivityRecord> filteredList = new ArrayList<>();
-        if (activityList != null) {
-            for (ActivityRecord record : activityList) {
-                if (isSameDay(record.getDate(), date)) {
-                    filteredList.add(record);
-                }
-            }
-        }
-        return filteredList;
-    }*/
-
-    private boolean isSameDay(long date1, long date2) {
-        Boolean b = false;
-        if (date1 == date2)
-            b = true;
-        return b;
     }
 
 

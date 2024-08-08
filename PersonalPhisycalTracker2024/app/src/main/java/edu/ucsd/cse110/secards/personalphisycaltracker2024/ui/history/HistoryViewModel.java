@@ -35,24 +35,17 @@ import edu.ucsd.cse110.secards.personalphisycaltracker2024.Date.AppDatabase;
             loadActivities();
         }
 
+
+
         public LiveData<List<ActivityRecord>> getActivities() {
             return activities;
         }
 
         private void loadActivities() {
             new Thread(() -> {
-                List<ActivityRecord> activityRecords = db.activityRecordDao().getAllRecords();
-                activities.postValue(activityRecords); // use postValue instead of setValue for background thread
+                allActivities = db.activityRecordDao().getAllRecords();
+                activities.postValue(allActivities ); // use postValue instead of setValue for background thread
             }).start();
         }
 
-        public List<ActivityRecord> filterActivitiesDorDate(long date) {
-            List<ActivityRecord> filteredActivities = new ArrayList<>();
-            for (ActivityRecord activity : allActivities) {
-                if (activity.getDate() == date) {
-                    filteredActivities.add(activity);
-                }
-            }
-            return filteredActivities;
-        }
     }

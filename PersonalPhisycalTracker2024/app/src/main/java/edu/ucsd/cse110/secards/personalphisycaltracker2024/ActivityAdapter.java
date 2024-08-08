@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.secards.personalphisycaltracker2024;
 
+import static androidx.core.util.TimeUtils.formatDuration;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import java.util.List;
 public class ActivityAdapter extends RecyclerView.Adapter<ActivityViewHolder> {
     private List<ActivityRecord> activityList;
     long duration = 0;
+
     public ActivityAdapter(List<ActivityRecord> activityList) {
         this.activityList = activityList;
     }
@@ -26,10 +29,10 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ActivityViewHolder holder, int position) {
-        ActivityRecord record = activityList.get(position);
-        holder.activityName.setText(record.getActivityName());
-        duration = record.getDuration();
-        holder.activityDuration.setText(""+duration);
+        ActivityRecord activity = activityList.get(position);
+        holder.textViewActivityName.setText(activity.getActivityName());
+        holder.textViewActivityDuration.setText(holder.formatDuration(activity.getDuration()));
+
     }
 
     @Override
@@ -37,13 +40,4 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityViewHolder> {
         return activityList.size();
     }
 
-   /* public List<ActivityRecord> getActivityListForDate(){
-        List<ActivityRecord> filteredList = new ArrayList<>();
-
-    }*/
-
-    public void updateList(List<ActivityRecord> newList) {
-        activityList = newList;
-        notifyDataSetChanged();
-    }
 }

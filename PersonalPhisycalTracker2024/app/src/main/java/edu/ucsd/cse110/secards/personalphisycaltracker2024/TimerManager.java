@@ -11,6 +11,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutorService; //modo piu elegante rispetto creare i thread manualmente
 
 import edu.ucsd.cse110.secards.personalphisycaltracker2024.Date.AppDatabase;
@@ -24,6 +28,8 @@ public class TimerManager {
     private AppDatabase db;
     private String currentActivity;
     private ExecutorService executorService;
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
 
     public TimerManager(TextView timerTextView, AppDatabase db, String currentActivity, ExecutorService executorService) {
         this.timerTextView = timerTextView;
@@ -53,9 +59,11 @@ public class TimerManager {
     }
 
     private void saveActivityRecord(long duration) {
-        long currentTime = System.currentTimeMillis();
-        ActivityRecord activityRecord = new ActivityRecord(currentActivity, duration, currentTime);
+        LocalDate currentTime = LocalDate.now();
+        String datainString  = currentTime.format(formatter);
+        ActivityRecord activityRecord = new ActivityRecord(currentActivity, duration, datainString);
         executorService.execute(() -> db.activityRecordDao().insert(activityRecord));
+
     }
 
     private Runnable runnable = new Runnable() {
