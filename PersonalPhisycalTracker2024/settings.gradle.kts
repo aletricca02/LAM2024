@@ -16,9 +16,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven("https://jitpack.io")
+
     }
 }
-
 
 
 rootProject.name = "PersonalPhisycalTracker2024"

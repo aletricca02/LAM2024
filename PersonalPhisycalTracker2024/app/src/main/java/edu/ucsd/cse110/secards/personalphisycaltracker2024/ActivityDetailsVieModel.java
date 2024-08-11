@@ -24,12 +24,21 @@ public class ActivityDetailsVieModel extends AndroidViewModel {
         allActivities = new MutableLiveData<>(new ArrayList<>());
     }
 
+    protected void loadActivitiesforDateAndFilter(String date, String Filter) {
+        new Thread(() -> {
+            List<ActivityRecord> activities = db.activityRecordDao().getFilteredActivities(date, Filter);
+            allActivities.postValue(activities); // Notifica l'UI quando i dati sono pronti
+        }).start();
+    }
+
     protected void loadActivitiesforDate(String date) {
         new Thread(() -> {
             List<ActivityRecord> activities = db.activityRecordDao().getActivitiesForDate(date);
             allActivities.postValue(activities); // Notifica l'UI quando i dati sono pronti
         }).start();
     }
+
+
 
     public LiveData<List<ActivityRecord>> getAllActivities() {
         return allActivities;

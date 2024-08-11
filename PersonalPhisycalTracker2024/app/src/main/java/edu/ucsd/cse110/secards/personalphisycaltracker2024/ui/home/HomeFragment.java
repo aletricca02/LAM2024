@@ -65,7 +65,7 @@ public class HomeFragment extends Fragment {
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                timerManager.stopTimer();
+                timerManager.stopTimer(activitySpinner.getSelectedItem().toString());
                 activitySpinner.setEnabled(true); // Abilita lo spinner quando il timer si ferma
             }
         });

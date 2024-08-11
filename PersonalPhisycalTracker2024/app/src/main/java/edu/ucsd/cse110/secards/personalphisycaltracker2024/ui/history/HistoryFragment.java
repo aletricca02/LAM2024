@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 
 import androidx.annotation.NonNull;
@@ -54,6 +55,17 @@ public class HistoryFragment extends Fragment {
         //adapter = new ActivityAdapter(activityList != null ? activityList : new ArrayList<ActivityRecord>());
         recyclerView.setAdapter(adapter);
         viewModel = new ViewModelProvider(this).get(HistoryViewModel.class);
+
+        // Recupera l'array di attività
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                getContext(),
+                R.array.activities_filter,
+                R.layout.spinner_item
+        );
+        // Imposta il layout del dropdown per lo spinner
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Imposta l'adapter allo spinner
+        filterSpinner.setAdapter(adapter);
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
@@ -68,6 +80,8 @@ public class HistoryFragment extends Fragment {
 
                 // Passa la data come stringa con l'intent
                 intent.putExtra("date", dataString);
+                intent.putExtra("filter", filterSpinner.getSelectedItem().toString());
+
                 startActivity(intent);
             }
         });

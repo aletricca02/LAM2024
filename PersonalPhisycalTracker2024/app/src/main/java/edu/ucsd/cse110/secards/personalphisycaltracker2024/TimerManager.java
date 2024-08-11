@@ -48,12 +48,13 @@ public class TimerManager {
         }
     }
 
-    public void stopTimer() {
+    public void stopTimer(String activity) {
         if (isRunning) {
             handler.removeCallbacks(runnable);
             long duration = System.currentTimeMillis() - startTime;
             timerTextView.setText("00:00:00");
             isRunning = false;
+            currentActivity = activity;
             saveActivityRecord(duration);
         }
     }

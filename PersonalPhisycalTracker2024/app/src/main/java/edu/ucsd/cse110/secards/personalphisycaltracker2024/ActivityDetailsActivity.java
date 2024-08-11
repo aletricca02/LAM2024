@@ -38,7 +38,14 @@ public class ActivityDetailsActivity extends AppCompatActivity {
 
         // Ricevi i dati dall'intent
         String dateString = getIntent().getStringExtra("date");
-        viewModel.loadActivitiesforDate(dateString);
+        String filter = getIntent().getStringExtra("filter");
+        assert filter != null;
+        if(filter.equals("Nessun Filtro")) {
+            viewModel.loadActivitiesforDate(dateString);
+        }else{
+            viewModel.loadActivitiesforDateAndFilter(dateString,filter);
+
+        }
         viewModel.getAllActivities().observe(this, activities -> {
             if (activities != null && !activities.isEmpty()) {
                 detailsTextView.setText("Date: "+dateString);
