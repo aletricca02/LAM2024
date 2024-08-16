@@ -15,6 +15,10 @@
     <string name="Charts">Charts</string>
     <string name="Personal_Phisical_Tracker">Personal Physical Tracker</string>
     <string name="Menu_options"> Menu Options</string>
+    <string-array name="filter_options">
+        <item>Data</item>
+        <item>Mese</item>
+    </string-array>
     <string-array name="activities_array">
         <item>Camminare</item>
         <item>Guidare la macchina</item>

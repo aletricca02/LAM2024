@@ -48,21 +48,21 @@ public class TimerManager {
         }
     }
 
-    public void stopTimer(String activity) {
+    public void stopTimer(String activity, int Steps) {
         if (isRunning) {
             handler.removeCallbacks(runnable);
             long duration = System.currentTimeMillis() - startTime;
             timerTextView.setText("00:00:00");
             isRunning = false;
             currentActivity = activity;
-            saveActivityRecord(duration);
+            saveActivityRecord(duration, Steps);
         }
     }
 
-    private void saveActivityRecord(long duration) {
+    private void saveActivityRecord(long duration, int Steps) {
         LocalDate currentTime = LocalDate.now();
         String datainString  = currentTime.format(formatter);
-        ActivityRecord activityRecord = new ActivityRecord(currentActivity, duration, datainString);
+        ActivityRecord activityRecord = new ActivityRecord(currentActivity, duration, datainString,Steps);
         executorService.execute(() -> db.activityRecordDao().insert(activityRecord));
 
     }

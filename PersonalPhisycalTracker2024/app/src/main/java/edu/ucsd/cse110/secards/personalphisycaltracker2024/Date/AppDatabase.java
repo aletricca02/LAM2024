@@ -10,7 +10,7 @@ import android.content.Context;
 
 import edu.ucsd.cse110.secards.personalphisycaltracker2024.ActivityRecord;
 
-@Database(entities = {ActivityRecord.class}, version = 3)
+@Database(entities = {ActivityRecord.class}, version = 4)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract ActivityRecordDao activityRecordDao();
 
@@ -22,7 +22,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     AppDatabase.class, "activity_records")
-                            .addMigrations(MIGRATION_2_3) // Aggiungi la migrazione
+                            .addMigrations(MIGRATION_3_4) // Aggiungi la migrazione
                             .build();
                 }
             }
@@ -30,19 +30,21 @@ public abstract class AppDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+    static final Migration MIGRATION_3_4 = new Migration(3, 4) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             // Crea una nuova tabella con il tipo di colonna aggiornato
             database.execSQL("CREATE TABLE IF NOT EXISTS `activity_records_new` (" +
                     "`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-                    "`date` TEXT, " +  // TEXT è il tipo per le stringhe in SQLite
+                    "`date` TEXT, " +
                     "`activityName` TEXT, " +
+                    "`steps` INTEGER DEFAULT 0, " + // Aggiungi un valore predefinito per la nuova colonna
                     "`duration` INTEGER NOT NULL)");
 
             // Copia i dati dalla vecchia tabella alla nuova
-            database.execSQL("INSERT INTO `activity_records_new` (`id`, `date`, `activityName`, `duration`) " +
-                    "SELECT `id`, `date`, `activityName`, `duration` FROM `activity_records`");
+            // Nota: se la colonna steps non esiste nella vecchia tabella, i valori saranno impostati a 0
+            database.execSQL("INSERT INTO `activity_records_new` (`id`, `date`, `activityName`, `duration`, `steps`) " +
+                    "SELECT `id`, `date`, `activityName`, `duration`, 0 AS `steps` FROM `activity_records`");
 
             // Elimina la vecchia tabella
             database.execSQL("DROP TABLE `activity_records`");

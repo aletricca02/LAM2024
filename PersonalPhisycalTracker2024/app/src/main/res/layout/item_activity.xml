@@ -27,5 +27,13 @@
             android:text="Duration: 1 hour"
             android:textSize="16sp"
             android:textColor="#555555"/>
+
+        <TextView
+            android:id="@+id/textViewActivityStep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Steps: "
+            android:textSize="16sp"
+            android:textColor="#555555"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

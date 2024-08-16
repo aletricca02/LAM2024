@@ -23,7 +23,10 @@ public interface ActivityRecordDao {
     @Query("SELECT * FROM activity_records WHERE date = :date AND activityName = :activityType")
     List<ActivityRecord> getFilteredActivities(String date, String activityType);
 
-    @Query("SELECT activityName,SUM(duration) as total_duration FROM activity_records WHERE strftime('%Y-%m', date) = :month GROUP BY activityName")
+    @Query("SELECT id, activityName,SUM(duration) as total_duration FROM activity_records WHERE strftime('%Y-%m', date) = :month GROUP BY activityName")
     List<ActivityStats> getActivitiesForMonth(String month);
+
+    @Query("SELECT id, activityName,SUM(duration) as total_duration FROM activity_records WHERE  date = :day GROUP BY activityName")
+    List<ActivityStats> getActivitiesForDay(String day);
 
 }

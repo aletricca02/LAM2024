@@ -41,6 +41,14 @@ android {
 }
 
 dependencies {
+    implementation(platform("androidx.compose:compose-bom:2023.10.01"))
+    implementation("androidx.activity:activity-compose")
+    implementation("androidx.compose.foundation:foundation")
+    implementation("androidx.compose.material:material")
+
+    // Se desideri aggiungere supporto per Wear OS, aggiungi anche queste:
+    implementation("androidx.wear:wear:1.2.0")
+    implementation("com.google.android.gms:play-services-wearable:18.0.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -57,6 +65,7 @@ dependencies {
     implementation(libs.androidx.material3.android)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.mpandroidchart)
+    implementation(libs.play.services.location)
     //implementation(libs.work.runtime.ktx)
     //implementation(libs.desugar.jdk.libs)
     coreLibraryDesugaring(libs.desugar.jdk.libs)

@@ -9,12 +9,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.BreakIterator;
 
 public class ActivityViewHolder extends RecyclerView.ViewHolder {
-    TextView textViewActivityName, textViewActivityDuration;
+    TextView textViewActivityName, textViewActivityDuration, textViewSteps;
 
     public ActivityViewHolder(@NonNull View itemView) {
         super(itemView);
         textViewActivityName = itemView.findViewById(R.id.textViewActivityName);
         textViewActivityDuration = itemView.findViewById(R.id.textViewActivityDuration);
+        textViewSteps = itemView.findViewById(R.id.textViewActivityStep);
     }
 
     protected String formatDuration(long durationInSeconds) {

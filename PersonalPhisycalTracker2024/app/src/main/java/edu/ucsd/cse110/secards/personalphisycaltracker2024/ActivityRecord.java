@@ -10,28 +10,37 @@ import androidx.room.PrimaryKey;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
 @Entity(tableName = "activity_records")
 public class ActivityRecord implements Parcelable {
+
     @PrimaryKey(autoGenerate = true)
     public int id;
+
     private String date; // Salviamo la data come String
     public String activityName;
+    public int steps;
     public long duration; // Duration in milliseconds
+
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    public ActivityRecord(String activityName, long duration,  String date) {
+    // Costruttore senza argomenti
+    public ActivityRecord() {
+    }
+
+    public ActivityRecord(String activityName, long duration, String date, Integer steps) {
         this.activityName = activityName;
         this.duration = duration;
         this.date = date;
-
+        this.steps = steps;
     }
 
+    // Costruttore per Parcel
     protected ActivityRecord(Parcel in) {
         id = in.readInt();
         date = in.readString();
         activityName = in.readString();
         duration = in.readLong();
+        steps = in.readInt();
     }
 
     public static final Creator<ActivityRecord> CREATOR = new Creator<ActivityRecord>() {
@@ -46,17 +55,36 @@ public class ActivityRecord implements Parcelable {
         }
     };
 
-    public String getActivityName(){
+    public String getActivityName() {
         return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
     }
 
     public String getDate() {
         return date;
     }
 
+    public void setDate(String date) {
+        this.date = date;
+    }
 
-    public long getDuration(){
+    public long getDuration() {
         return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+    public String getSteps() {
+        return "Passi effettuati: "+steps;
+    }
+
+    public void setSteps(int steps) {
+        this.steps = steps;
     }
 
     @Override
@@ -70,14 +98,16 @@ public class ActivityRecord implements Parcelable {
         dest.writeString(date);
         dest.writeString(activityName);
         dest.writeLong(duration);
+        dest.writeInt(steps);
     }
 
     @Override
     public String toString() {
         return "ActivityRecord{" +
-                "date=" + date +
+                "date='" + date + '\'' +
                 ", activityName='" + activityName + '\'' +
-                ", activityduration='" + duration+ '\'' +
+                ", duration=" + duration +
+                ", steps=" + steps +
                 '}';
     }
 }

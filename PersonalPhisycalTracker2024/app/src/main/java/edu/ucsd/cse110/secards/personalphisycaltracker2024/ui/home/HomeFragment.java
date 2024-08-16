@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.secards.personalphisycaltracker2024.ui.home;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,9 +9,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -27,6 +36,10 @@ public class HomeFragment extends Fragment {
     private TimerManager timerManager;
     private AppDatabase db;
     private ExecutorService executorService;
+    private StepCounterManager stepCounterManager;
+    private static final int PERMISSION_REQUEST_ACTIVITY_RECOGNITION = 100;
+    int steps = 0;
+
 
     @Nullable
     @Override
@@ -40,6 +53,17 @@ public class HomeFragment extends Fragment {
         Button startButton = view.findViewById(R.id.startButton);
         Button stopButton = view.findViewById(R.id.stopButton);
         Spinner activitySpinner = view.findViewById(R.id.activitySpinner);
+
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACTIVITY_RECOGNITION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Richiedi il permesso se non è stato già concesso
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.ACTIVITY_RECOGNITION},
+                    PERMISSION_REQUEST_ACTIVITY_RECOGNITION);
+        } else {
+            // Il permesso è già stato concesso
+            stepCounterManager = new StepCounterManager(getContext());
+        }
 
         // Recupera l'array di attività
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
@@ -57,6 +81,15 @@ public class HomeFragment extends Fragment {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String selectedActivity = activitySpinner.getSelectedItem().toString();
+                if ("Camminare".equals(selectedActivity)) {
+                    if (stepCounterManager != null) {
+                        stepCounterManager.startListening(); // Inizia a registrare i passi
+                    } else {
+                        Toast.makeText(getContext(), "StepCounterManager non è disponibile", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                steps=0;
                 timerManager.startTimer();
                 activitySpinner.setEnabled(false); // Disabilita lo spinner quando il timer inizia
             }
@@ -65,12 +98,35 @@ public class HomeFragment extends Fragment {
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                timerManager.stopTimer(activitySpinner.getSelectedItem().toString());
+                String selectedActivity = activitySpinner.getSelectedItem().toString();
+                if ("Camminare".equals(selectedActivity)) {
+                    if (stepCounterManager != null) {
+                        stepCounterManager.stopListening(); // Ferma la registrazione dei passi
+                        steps = stepCounterManager.getStepCount();
+                    }
+                }
+                timerManager.stopTimer(selectedActivity, steps);
                 activitySpinner.setEnabled(true); // Abilita lo spinner quando il timer si ferma
+
             }
         });
 
         return view;
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_ACTIVITY_RECOGNITION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permesso concesso, inizializza StepCounterManager
+                stepCounterManager = new StepCounterManager(getContext());
+            } else {
+                // Permesso negato
+                Toast.makeText(getContext(), "Permesso contapassi negato", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 }

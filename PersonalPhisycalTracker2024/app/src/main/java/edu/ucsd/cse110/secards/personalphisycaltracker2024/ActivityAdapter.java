@@ -32,6 +32,11 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityViewHolder> {
         ActivityRecord activity = activityList.get(position);
         holder.textViewActivityName.setText(activity.getActivityName());
         holder.textViewActivityDuration.setText(holder.formatDuration(activity.getDuration()));
+        if(activity.getActivityName().equals("Camminare")) {
+            holder.textViewSteps.setText(activity.getSteps());
+        }else {
+            holder.textViewSteps.setText("Passi non registrati per questa attività");
+        }
 
     }
 
