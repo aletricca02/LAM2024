@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="edu.ucsd.cse110.secards.personalphisycaltracker2024.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_gallery"
+        android:name="edu.ucsd.cse110.secards.personalphisycaltracker2024.ui.history.HistoryFragment"
+        android:label="@string/activities"
+        tools:layout="@layout/history_gallery" />
+
+    <fragment
+        android:id="@+id/nav_slideshow"
+        android:name="edu.ucsd.cse110.secards.personalphisycaltracker2024.ui.slideshow.SlideshowFragment"
+        android:label="@string/Charts"
+        tools:layout="@layout/fragment_charts" />
+    <fragment
+        android:id="@+id/nav_geo"
+        android:name="edu.ucsd.cse110.secards.personalphisycaltracker2024.ui.Geo.GeoFragment"
+        android:label="@string/Map"
+        tools:layout="@layout/fragment_geo" />
+</navigation>
