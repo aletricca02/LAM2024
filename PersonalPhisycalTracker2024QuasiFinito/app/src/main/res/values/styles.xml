@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tema personalizzato per il menu overflow -->
+    <style name="CustomPopupTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:popupBackground">@color/DarkBlue</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:itemBackground">@color/DarkBlue</item>
+        <item name="android:itemTextAppearance">@style/CustomMenuItemTextAppearance</item>
+    </style>
+
+    <style name="CustomMenuItemTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:gravity">center_horizontal|center_vertical</item> <!-- Centra il testo -->
+    </style>
+</resources>
